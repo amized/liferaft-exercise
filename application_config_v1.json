@@ -1,0 +1,222 @@
+{
+  "application": {
+    "account": {
+      "type": "struct",
+      "required": true,
+      "ui:label": "Account",
+      "fields": {
+        "email": {
+          "ui:label": "Email Address",
+          "type": "email",
+          "required": true
+        }
+      }
+    },
+    "applicant": {
+      "type": "struct",
+      "required": true,
+      "ui:label": "Applicant",
+      "fields": {
+        "first_name": {
+          "type": "string",
+          "required": true,
+          "ui:label": "First Name"
+        },
+        "middle_name": {
+          "type": "string",
+          "required": false,
+          "ui:label": "Middle Name"
+        },
+        "last_name": {
+          "type": "string",
+          "required": true,
+          "ui:label": "Last Name"
+        },
+        "date_of_birth": {
+          "type": "date",
+          "required": true,
+          "ui:label": "Date of birth (MM/DD/YYYY)"
+        },
+        "has_spouse": {
+          "type": "boolean",
+          "required": true,
+          "ui:label": "Would you also like to enroll your spouse?"
+        },
+        "has_dependents": {
+          "type": "boolean",
+          "required": true,
+          "ui:label": "Do you have any dependent children?"
+        },
+        "spouse": {
+          "type": "struct",
+          "required": false,
+          "ui:label": "Spouse",
+          "fields": {
+            "first_name": {
+              "type": "string",
+              "required": true,
+              "ui:label": "First Name"
+            },
+            "middle_name": {
+              "type": "string",
+              "required": false,
+              "ui:label": "Middle Name"
+            },
+            "last_name": {
+              "type": "string",
+              "required": true,
+              "ui:label": "Last Name"
+            },
+            "date_of_birth": {
+              "type": "date",
+              "required": true,
+              "ui:label": "Date of birth (MM/DD/YYYY)"
+            }
+          }
+        },
+        "dependents": {
+          "type": "struct",
+          "required": true,
+          "ui:label": "Dependents",
+          "fields": {
+            "number_of_children": {
+              "type": "integer",
+              "required": true,
+              "ui:label": "How many children do you have?"
+            }
+          }
+        }
+      }
+    },
+    "mailing_address": {
+      "type": "struct",
+      "required": true,
+      "ui:label": "Your Address",
+      "fields": {
+        "address1": {
+          "type": "string",
+          "required": true,
+          "ui:label": "Address line 1"
+        },
+        "address2": {
+          "type": "string",
+          "required": false,
+          "ui:label": "Address line 2"
+        },
+        "address3": {
+          "type": "string",
+          "required": false,
+          "ui:label": "Address line 3"
+        },
+        "city": {
+          "type": "string",
+          "required": true,
+          "ui:label": "City"
+        },
+        "state": {
+          "type": "string",
+          "required": true,
+          "ui:label": "State"
+        },
+        "zip": {
+          "type": "string",
+          "required": true,
+          "ui:label": "Zip"
+        }
+      }
+    }
+  },
+  "ui": [
+    {
+      "title": "Account",
+      "path": "account",
+      "fields": [
+        {
+          "name": "applicant.first_name"
+        },
+        {
+          "name": "applicant.middle_name"
+        },
+        {
+          "name": "applicant.last_name"
+        },
+        {
+          "name": "applicant.date_of_birth"
+        }
+      ]
+    },
+    {
+      "title": "Email",
+      "path": "email",
+      "fields": [
+        {
+          "name": "account.email"
+        }
+      ]
+    },
+    {
+      "title": "Spouse",
+      "path": "spouse",
+      "fields": [
+        {
+          "name": "applicant.has_spouse"
+        },
+        {
+          "name": "applicant.spouse.first_name",
+          "showif": { "==": [{ "var": "applicant.has_spouse" }, "yes"] }
+        },
+        {
+          "name": "applicant.spouse.middle_name",
+          "showif": { "==": [{ "var": "applicant.has_spouse" }, "yes"] }
+        },
+        {
+          "name": "applicant.spouse.last_name",
+          "showif": { "==": [{ "var": "applicant.has_spouse" }, "yes"] }
+        },
+        {
+          "name": "applicant.spouse.date_of_birth",
+          "showif": { "==": [{ "var": "applicant.has_spouse" }, "yes"] }
+        }
+      ]
+    },
+    {
+      "title": "Dependents",
+      "path": "dependents",
+      "fields": [
+        {
+          "name": "applicant.has_dependents"
+        },
+        {
+          "name": "applicant.dependents.number_of_children",
+          "showif": { "==": [{ "var": "applicant.has_dependents" }, "yes"] }
+        }
+      ]
+    },
+    {
+      "title": "Address",
+      "path": "address",
+      "fields": [
+        {
+          "name": "mailing_address.address1"
+        },
+        {
+          "name": "mailing_address.address2"
+        },
+        {
+          "name": "mailing_address.address3"
+        },
+        {
+          "name": "mailing_address.city"
+        },
+        {
+          "name": "mailing_address.state"
+        },
+        {
+          "name": "mailing_address.zip"
+        }
+
+      ]
+    }
+
+  ]
+}
