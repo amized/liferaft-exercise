@@ -1,3 +1,86 @@
+
+# Liferaft signup
+
+To set up this test, run the python backend as usual.
+
+## Developing
+
+Instructions below assumes you have the following installed:
+
+* yarn package manager
+* Node JS 10.0.0 or higher
+* python3.8 or higher
+
+
+Run python backend
+
+```
+$ python server.py
+```
+
+Build frontend
+
+```
+$ cd app
+$ yarn install
+```
+
+Start dev server
+
+```
+$ yarn start
+```
+
+## Build and test
+
+To build:
+
+```
+$ cd app
+$ yarn install
+$ yarn build
+```
+
+Then serve locally (make sure you're still in /app)
+
+```
+$ yarn global add serve
+$ serve -s build
+```
+
+Then visit `http://localhost:5000/` in a browser (only tested in chrome). Make sure the python backend is running.
+
+
+# Notes
+
+The solution for this exercise was to build a single page React app using Create React App to bootstrap the project.
+
+## Approach
+
+I utilized a React form library I like called Final Form, which gives a whole bunch of goodies like form state management, validation, submission states, and it's architecture lends well to building a dynamic form.
+
+I used browser localstorage to store the state of the the current answers in the browser so no information is lost when the user refreshes. 
+
+I used React Router to set up dynamic routes for handling navigation of the form.
+
+I was able to keep the configuration file mostly the same but made some additions to assist with making the application fully dynamic:
+
+* I added a "UI" property to the configuration that lets you configure the layout and which fields appear where and in which order. The main philosophy behind the UI configuration is separation of concerns between the layout of the form as presented to the user, and the shape of the data that is expected by the backend. This improves the scalability of the forms as they become more complex.
+* The UI configuration also allows for dynamic branching where you can show or hide fields based on values from another field. To implement this logic I used a library called json logic.
+* In the data schema I added some fields to represent the additional questions of "you have a spouse" and "do you have dependents". While this seems like redundant data, it assists in being able to control the UI of the form from configuration, and it simplifies code in that we don't need special rules to handle questions that don't map to primitive data types.
+
+## Improvements
+
+* While I got routing working (you can navigate between pages in a step by step form) the application is missing logic to redirect the user to the correct page in the form when they come back or refresh (supposedly you would want to come back to where you left off).
+* Following from ^ there is no secuirty around jumping ahead to a future step by typing in the url of that step manually into the browser.
+* The API URL is hardcoded in the app which is not great for handling varying environments in which the app is run. In a proper implementation I would extract this to an environment variable.
+* I noticed a little edge case bug where if you put in spouses details and then toggle the answer to you don't want to enroll your spouse, the spouse data is still included in the payload. This could be fixed with an additional filtering logic in the submission function. 
+* I'm sure there are others!
+
+
+
+
+
 # Application Form
 
 This is an exercise designed to evaluate your frontend development skills. You are being evaluated on your technical implementation and design.
