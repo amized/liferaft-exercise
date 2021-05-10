@@ -15,7 +15,7 @@ interface Props {
 }
 
 const required = (val: any) => {
-  if (val === undefined) {
+  if (val === undefined || val === '') {
     return 'This field is required.';
   }
   return undefined;
@@ -28,6 +28,11 @@ const validateEmail = (email: string) => {
   }
 };
 
+/**
+ * Generic field component. Will take the name of the field,
+ * and look up the loaded config to gather meta properties around that
+ * field.
+ */
 const Field: React.FC<Props> = ({ name }) => {
   const config = useConfig();
 
@@ -82,16 +87,19 @@ interface WidgetProps {
   meta: FieldMetaState<any>;
 }
 
+/**
+ * Which input / field widget to render based on the field type
+ */
 const Widget: React.FC<WidgetProps> = ({ type, input, meta }) => {
   switch (type) {
     case 'string':
-      return <input type="text" {...input} />;
+      return <Input type="text" {...input} />;
     case 'email':
-      return <input type="email" {...input} />;
+      return <Input type="email" {...input} />;
     case 'date':
-      return <input type="date" {...input} />;
+      return <Input type="date" {...input} />;
     case 'integer':
-      return <input type="number" {...input} />;
+      return <Input type="number" {...input} />;
     case 'boolean': {
       return (
         <div>
@@ -137,6 +145,13 @@ const FieldLabel = styled.label<{ error: boolean }>`
 const ErrorMsg = styled.div`
   color: red;
   margin-top: 5px;
+`;
+
+const Input = styled.input`
+  padding: 6px;
+  border: 1px solid #aaa;
+  border-radius: 3px;
+  min-width: 200px;
 `;
 
 export default Field;

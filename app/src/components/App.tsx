@@ -10,7 +10,7 @@ import { Form } from 'react-final-form';
 import { FORM_ERROR } from 'final-form';
 import { useConfig } from '../context/config';
 import styled, { createGlobalStyle, keyframes } from 'styled-components';
-import { LOCAL_STORAGE_KEY } from '../constants';
+import { LOCAL_STORAGE_KEY, API_URL } from '../constants';
 import Autosave from './Autosave';
 
 const sleep = (ms: number) => new Promise((res) => setTimeout(res, ms));
@@ -36,19 +36,24 @@ const App: React.FC = () => {
     } else {
       setInitialEntries({});
     }
-  }, []);
+  }, [schema.application]);
 
   const handleSubmit = useCallback(async (data) => {
     const payload = JSON.stringify(data);
     await sleep(2000);
     try {
-      await fetch('http://localhost:8888', {
+      const result = await fetch(API_URL, {
         method: 'POST',
         body: payload,
         headers: {
           'Content-type': 'application/json'
         }
       });
+
+      const resultJson = await result.json();
+      if (resultJson.error) {
+        return { [FORM_ERROR]: 'Submit Failed' };
+      }
       return;
     } catch (err) {
       return { [FORM_ERROR]: 'Submit Failed' };
@@ -76,7 +81,6 @@ const App: React.FC = () => {
               submitFailed,
               values
             }) => {
-              console.log('The form values', values);
               if (submitSucceeded) {
                 return (
                   <SubmitSuccess>

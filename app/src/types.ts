@@ -1,8 +1,6 @@
-
-
-export interface Config {
-  application: FieldMap;
-  ui: UISchemaPage[];
+export interface UISchemaField {
+  name: string;
+  showif: any;
 }
 
 export interface UISchemaPage {
@@ -11,18 +9,24 @@ export interface UISchemaPage {
   fields: UISchemaField[];
 }
 
-export interface UISchemaField {
-  name: string;
-  showif: any;
-}
-
-export type SchemaType = 'struct' | 'string' | 'email' | 'date' | 'integer' | 'boolean';
+export type SchemaType =
+  | 'struct'
+  | 'string'
+  | 'email'
+  | 'date'
+  | 'integer'
+  | 'boolean';
 
 export interface SchemaProp {
   type: SchemaType;
   required: boolean;
   fields?: FieldMap;
-  "ui:label": string;
+  'ui:label': string;
 }
 
 export type FieldMap = Record<string, SchemaProp>;
+
+export interface Config {
+  application: FieldMap;
+  ui: UISchemaPage[];
+}

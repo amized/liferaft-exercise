@@ -1,9 +1,9 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 import Field from './Field';
 import { UISchemaField } from '../types';
 import styled from 'styled-components';
-import { useFormState } from 'react-final-form';
+import { useForm, useFormState } from 'react-final-form';
 import jsonLogic from 'json-logic-js';
 import _ from 'lodash';
 
@@ -14,11 +14,25 @@ interface Props {
   back?: string;
 }
 
+/**
+ * A page represents the current "step". It is associated
+ * with a route from the config and provides funtionality
+ * to allow forward and back navigation, and logic
+ * for determining whether the user has completed the fields
+ * on the page.
+ */
 const Page: React.FC<Props> = ({ fields, next, back, title }) => {
   const formState = useFormState();
   const history = useHistory();
+  const form = useForm();
+  useEffect(() => {
+    // On component mount, reset the form to kick in the
+    // validation (which toggles whether the next button is enabled)
+    form.reset(formState.values);
+  }, []); // eslint-disable-line
 
   // Filter out any fields that should not be included on the page
+  // due to "showif" toggling
   const applicableFields = useMemo(
     () =>
       fields?.filter((field) => {
@@ -38,10 +52,6 @@ const Page: React.FC<Props> = ({ fields, next, back, title }) => {
       }, false),
     [formState.errors, applicableFields]
   );
-
-  console.log('The form state', formState);
-  console.log('The frm values', formState.values);
-  console.log('The frm errors', formState.errors);
 
   const handleNext = useCallback(() => {
     history.push(`/${next}`);
